@@ -32,7 +32,7 @@ jobs:
           name: Install project dependencies and Expo
           working_directory: ~/project
           command: |
-            yarn install
+            yarn
             yarn add expo
       - run:
           name: Verify installation
