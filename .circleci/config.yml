@@ -18,27 +18,26 @@ jobs:
           name: Run tests
           command: npm run test -- --forceExit  # Force exit to avoid hanging
   deploy:
-   docker:
-    - image: cimg/base:stable
-   steps:
-    - checkout
-    - run:
-        name: Install Node.js and npm
-        command: |
-          curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -  # Install Node.js 16.x
-          sudo apt-get install -y nodejs  # This will install both Node.js and npm
-    - run:
-        name: Verify installation
-        command: node -v && npm -v && npx -v  # Ensure Node.js, npm, and npx are installed correctly
-    - run:
-        name: deploy
-        command: npx expo start && exit 0  # Run your deploy command
-
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Install Node.js and npm
+          command: |
+            curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -  # Install Node.js 16.x
+            sudo apt-get install -y nodejs  # This will install both Node.js and npm
+      - run:
+          name: Verify installation
+          command: node -v && npm -v && npx -v  # Ensure Node.js, npm, and npx are installed correctly
+      - run:
+          name: deploy
+          command: npx expo start && exit 0  # Run your deploy command
 
 workflows:
   build-and-test:
     jobs:
-      # - test-node
+      - test-node  # Include the test-node job
       - deploy:
-          # requires:
-          #  - test-node
+          requires:
+            - test-node  # Ensure deploy runs only after test-node
