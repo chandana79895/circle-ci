@@ -28,8 +28,13 @@ jobs:
             curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -  # Install Node.js 16.x
             sudo apt-get install -y nodejs yarn  # This will install both Node.js and npm
       - run:
+          name: Install Expo and dependencies
+          command: |
+            yarn install  # Use yarn to install project dependencies including expo
+            yarn add expo  # Ensure expo is installed if not already in the project
+      - run:
           name: Verify installation
-          command: node -v && npm -v && npx -v  # Ensure Node.js, npm, and npx are installed correctly
+          command: node -v && npm -v && npx -v && expo --version  # Verify expo installation
       - run:
           name: deploy
           command: npx expo start && exit 0  # Run your deploy command
