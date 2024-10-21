@@ -25,11 +25,12 @@ jobs:
       - run:
           name: Install Node.js and npm
           command: |
-            curl -sL https://deb.nodesource.com/setup_16.x | bash -
-            apt-get install -y nodejs
+            sudo apt-get update  # Run the update command with sudo
+            sudo apt-get install -y nodejs  # Use sudo for installing packages
       - run:
           name: deploy
           command: npx expo start && exit 0
+
 workflows:
   build-and-test:
     jobs:
