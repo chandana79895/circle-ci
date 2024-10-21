@@ -11,6 +11,11 @@ jobs:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
     steps:
       - checkout
+      - run:
+        name: Install Node.js and npm
+        command: |
+          curl -sL https://deb.nodesource.com/setup_16.x | bash -
+          apt-get install -y nodejs
       - node/install-packages:
           pkg-manager: npm
       - run:
