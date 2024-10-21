@@ -27,21 +27,17 @@ jobs:
           name: Install Node.js, npm, and yarn
           command: |
             curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -  # Install Node.js 20.x
-            sudo apt-get install -y nodejs yarn eas-cli
+            sudo apt-get install -y nodejs yarn 
       - run:
           name: Install eas-cli
           command: |
             npm install -g eas-cli    
-            eas login
+            echo $EXPO_USERNAME | npx expo login --username $EXPO_USERNAME --password $(echo $EXPO_PASSWORD)      
       - run:
           name: Install project dependencies and Expo
           working_directory: ~/project
           command: |
-            npm install --save expo
-      - run:
-          name: Expo Login
-          command: |
-            echo $EXPO_USERNAME | npx expo login --username $EXPO_USERNAME --password $(echo $EXPO_PASSWORD)      
+            npm install --save expo      
       - run:
           name: Verify installation
           command: |
