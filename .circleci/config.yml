@@ -23,18 +23,19 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Node.js and npm
+          name: Install Node.js, npm, and yarn
           command: |
             curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -  # Install Node.js 16.x
-            sudo apt-get install -y nodejs yarn  # This will install both Node.js and npm
+            sudo apt-get install -y nodejs yarn  # This will install both Node.js, npm, and yarn
       - run:
-          name: Install Expo and dependencies
+          name: Install project dependencies and Expo
+          working_directory: ~/project  # Ensure working in the project directory
           command: |
-            yarn install  # Use yarn to install project dependencies including expo
-            yarn add expo  # Ensure expo is installed if not already in the project
+            yarn install  # Install all project dependencies using yarn
+            yarn add expo  # Ensure expo is installed
       - run:
           name: Verify installation
-          command: node -v && npm -v && npx -v && expo --version  # Verify expo installation
+          command: node -v && npm -v && npx -v && expo --version  # Ensure expo is installed correctly
       - run:
           name: deploy
           command: npx expo start && exit 0  # Run your deploy command
