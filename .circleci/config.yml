@@ -1,22 +1,23 @@
 version: 2.1
 orbs:
-  node: circleci/node@5  # Correct usage of the orb
+  node: circleci/node@5
+
 jobs:
   test-node:
-    # Install node dependencies and run tests
     executor: node/default
     environment:
       JEST_JUNIT_OUTPUT_DIR: ./test-results/
     steps:
       - checkout
-      - node/install-packages:  # Install node packages using the orb
+      - node/install-packages:
           pkg-manager: npm
       - run:
           name: Create test results directory
           command: mkdir -p ./test-results
       - run:
           name: Run tests
-          command: npm run test -- --forceExit  # Force exit to avoid hanging
+          command: npm run test -- --forceExit
+
   deploy:
     docker:
       - image: cimg/base:stable
@@ -25,26 +26,29 @@ jobs:
       - run:
           name: Install Node.js, npm, and yarn
           command: |
-            curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -  # Install Node.js 16.x
-            sudo apt-get install -y nodejs yarn  # This will install both Node.js, npm, and yarn
+            curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+            sudo apt-get install -y nodejs yarn
       - run:
           name: Install project dependencies and Expo
-          command: pwd
-          working_directory: ~/project  # Ensure working in the project directory
+          working_directory: ~/project
           command: |
-            yarn install  # Install all project dependencies using yarn
-            yarn add expo  # Ensure expo is installed
+            yarn install
+            yarn add expo
       - run:
           name: Verify installation
-          command: node -v && npm -v && npx -v && expo --version  # Ensure expo is installed correctly
+          command: |
+            node -v
+            npm -v
+            npx -v
+            expo --version
       - run:
-          name: deploy
-          command: npx expo start && exit 0  # Run your deploy command
+          name: Deploy
+          command: npx expo start
 
 workflows:
   build-and-test:
     jobs:
-      - test-node  # Include the test-node job
+      - test-node
       - deploy:
           requires:
-            - test-node  # Ensure deploy runs only after test-node
+            - test-node
