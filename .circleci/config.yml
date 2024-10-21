@@ -32,8 +32,7 @@ jobs:
           name: Install project dependencies and Expo
           working_directory: ~/project
           command: |
-            npm install expo
-            npm add expo
+            npm install --save expo
       - run:
           name: Verify installation
           command: |
