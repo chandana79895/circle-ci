@@ -39,7 +39,6 @@ jobs:
             node -v
             npm -v
             npx -v
-            expo --version
       - run:
           name: Deploy
           command: npx expo start
