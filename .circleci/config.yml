@@ -41,7 +41,7 @@ jobs:
             npx -v
       - run:
           name: Deploy
-          command: npx expo start
+          command: npx expo start --web
 
 workflows:
   build-and-test:
