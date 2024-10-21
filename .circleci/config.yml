@@ -30,8 +30,9 @@ jobs:
             curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -  # Install Node.js 20.x
             sudo apt-get install -y nodejs yarn 
       - run:
-          name: Install eas-cli and Login
+          name: Install eas-cli globally and Login
           command: |
+            sudo npm install -g eas-cli
             npx expo login --username "$EXPO_USERNAME" --password "$EXPO_PASSWORD"
       - run:
           name: Install project dependencies and Expo
@@ -47,8 +48,7 @@ jobs:
       - run:
           name: Deploy
           command: |
-            npm install eas-cli
-            eas build --platform android --non-interactive --no-wait
+            npx eas build --platform android --non-interactive --no-wait
 
 workflows:
   build-and-test:
