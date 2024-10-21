@@ -14,19 +14,25 @@ jobs:
       - node/install-packages:
           pkg-manager: npm
       - run:
+          name: Create test results directory
+          command: mkdir -p ./test-results    
+      - run:
           command: npm install 
       - run:
           name: Run tests
-          command: npm run test 
+          command: npm run test && exit 0
   deploy:
     # This is an example deploy job, not actually used by the workflow
     docker:
       - image: cimg/base:stable
+        resources:
+          cpu: "2"
+          memory: "4096"
     steps:
       # Replace this with steps to deploy to users
       - run:
           name: deploy
-          command: npx expo start
+          command: npx expo start && exit 0
 workflows:
   build-and-test:
     jobs:
