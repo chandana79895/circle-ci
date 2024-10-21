@@ -29,6 +29,12 @@ jobs:
             curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
             sudo apt-get install -y nodejs yarn
       - run:
+          name: Install project dependencies and Expo
+          working_directory: ~/project
+          command: |
+            yarn install
+            yarn add expo
+      - run:
           name: Verify installation
           command: |
             node -v
