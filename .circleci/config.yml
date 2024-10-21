@@ -25,8 +25,9 @@ jobs:
       - run:
           name: Install Node.js and npm
           command: |
-            sudo apt-get update  # Run the update command with sudo
-            sudo apt-get install -y nodejs  # Use sudo for installing packages
+            sudo apt-get update  
+            sudo apt-get install -y nodejs  
+            sudo apt-get install -y npx
       - run:
           name: deploy
           command: npx expo start && exit 0
