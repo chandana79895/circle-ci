@@ -1,29 +1,58 @@
-deploy:
-  docker:
-    - image: cimg/base:stable
-  steps:
-    - checkout
-    - run:
-        name: Install Node.js, npm, and yarn
-        command: |
-          curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -  # Install Node.js 20.x
-          sudo apt-get install -y nodejs yarn 
-    - run:
-        name: Install and Run eas-cli
-        command: |
-          npm install eas-cli
-          echo $EXPO_USERNAME | npx expo login --username $EXPO_USERNAME --password $(echo $EXPO_PASSWORD)
-    - run:
-        name: Install project dependencies and Expo
-        working_directory: ~/project
-        command: |
-          npm install --save expo      
-    - run:
-        name: Verify installation
-        command: |
-          node -v
-          npm -v
-          npx -v
-    - run:
-        name: Deploy
-        command: eas build --platform android --profile preview --non-interactive --no-wait
+version: 2.1
+
+orbs:
+  node: circleci/node@5
+
+jobs:
+  test-node:
+    executor: node/default
+    environment:
+      JEST_JUNIT_OUTPUT_DIR: ./test-results/
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: npm
+      - run:
+          name: Create test results directory
+          command: mkdir -p ./test-results
+      - run:
+          name: Run tests
+          command: npm run test -- --forceExit
+
+  deploy:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - checkout
+      - run:
+          name: Install Node.js, npm, and yarn
+          command: |
+            curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -  # Install Node.js 20.x
+            sudo apt-get install -y nodejs yarn 
+      - run:
+          name: Install eas-cli
+          command: |
+            npm install eas-cli
+            echo $EXPO_USERNAME | npx expo login --username $EXPO_USERNAME --password $(echo $EXPO_PASSWORD)      
+      - run:
+          name: Install project dependencies and Expo
+          working_directory: ~/project
+          command: |
+            npm install --save expo      
+      - run:
+          name: Verify installation
+          command: |
+            node -v
+            npm -v
+            npx -v
+      - run:
+          name: Deploy
+          command: eas build
+
+workflows:
+  build-and-test:
+    jobs:
+      - test-node
+      - deploy:
+          requires:
+            - test-node
