@@ -32,9 +32,7 @@ jobs:
           command: node -v && npm -v && npx -v  # Ensure Node.js, npm, and npx are installed correctly
       - run:
           name: deploy
-          command: |
-            yarn add expo
-            npx expo start && exit 0  # Run your deploy command
+          command: npx expo start && exit 0  # Run your deploy command
 
 workflows:
   build-and-test:
